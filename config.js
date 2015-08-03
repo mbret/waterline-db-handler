@@ -5,9 +5,9 @@ var path = require('path');
 var diskAdapter = require('sails-disk');
 
 module.exports = {
+
     configPath: path.join(__dirname, '..', '..', 'config'),
     modelsPath: path.join(__dirname, '..', '..', 'api', 'models'),
-    samplePath: path.join(__dirname, 'sample.js'),
 
     waterline: {
         // Setup Adapters

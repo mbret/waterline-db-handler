@@ -2,10 +2,16 @@
   "name": "waterline-db-handler",
   "version": "1.0.0",
   "description": "Manage waterline database out of waterline/sails app",
-  "main": "run.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "bret.maxime@gmail.com",
-  "license": "ISC"
+  "author": {
+    "name": "bret.maxime@gmail.com"
+  },
+  "license": "ISC",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "yargs": "^3.17.1"
+  }
 }
