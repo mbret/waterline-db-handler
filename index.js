@@ -1,18 +1,24 @@
 (function(){
     'use strict';
 
-    var fs      = require('fs');
-    var path    = require('path');
-    var util    = require('util');
-    var config  = require(path.join(__dirname, 'config.js'));
-    var loader  = require('./lib/database-load.js');
-    var logger  = require('./lib/logger.js');
+    var fs              = require('fs');
+    var path            = require('path');
+    var util            = require('util');
+    var internalConfig  = require(path.join(__dirname, 'config.js'));
+    var loader          = require('./lib/database-load.js');
+    var logger          = require('./lib/logger.js');
+    var configLoader    = require('./lib/config-loader.js');
 
     displayHeader();
 
     var argv    = require('./lib/args.js')
 
     var command = argv._[0];
+
+    // Retrieve user specific config
+    var userConfig = configLoader(argv.config);
+    // We now have a valid config to connect to the user sails database
+    var config = mergeConfig(internalConfig, userConfig);
 
     displayScriptInfo(command);
 
@@ -23,7 +29,7 @@
             loader(config, function(err, models){
                 if(err) throw err;
 
-                require('./lib/provider.js')(sample);
+                require('./lib/database-provider.js')(sample);
             });
             break;
         case 'drop':
@@ -54,5 +60,14 @@
         logger.green('');
     }
 
+    /**
+     * Merge the user config with the package config to create a valid config.
+     * This config is then used to connect to waterline etc.
+     * @param internalConfig
+     * @param userConfig
+     */
+    function mergeConfig(internalConfig, userConfig){
+        return internalConfig;
+    }
 
 })();
