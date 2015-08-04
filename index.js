@@ -1,63 +1,58 @@
 (function(){
     'use strict';
 
-    //var _ = require('lodash');
-    var fs = require('fs');
-    var path = require('path');
-    var loader  = require('./lib/database-load.js');
+    var fs      = require('fs');
+    var path    = require('path');
+    var util    = require('util');
     var config  = require(path.join(__dirname, 'config.js'));
-    //var sample  = require(config.samplePath);
-    var args    = process.argv.slice(2);
+    var loader  = require('./lib/database-load.js');
+    var logger  = require('./lib/logger.js');
 
-    var argv = require('yargs')
-        .usage('Usage: $0 -action [num] -sample [path]')
-        .demand(['action', 'sample'])
-        .argv;
+    displayHeader();
 
-    try{
-        var sample = require(argv.sample);
-    }
-    catch(err){
-        console.error('Please specify a valid sample path');
-        process.exit();
-    }
+    var argv    = require('./lib/args.js')
 
-    displayInfo();
+    var command = argv._[0];
 
-    switch(argv.action){
+    displayScriptInfo(command);
+
+    logger.yellow('Script starting..');
+    switch(command){
         case 'exec':
-            console.log('executing script ..');
+            var sample = require(argv.sample);
             loader(config, function(err, models){
                 if(err) throw err;
 
-                sample()
-                    .then(function(){
-                        console.log('Script over');
-                    })
-                    .catch(console.error);
+                require('./lib/provider.js')(sample);
             });
             break;
         case 'drop':
-            console.log('Dropping database ..');
             config.waterline.models.migrate = 'drop';
             loader(config, function(err, models){
                 if(err) throw err;
-
-                console.log('Dropping done!');
+                logger.yellow('Database dropped!');
             });
             break;
         default:
             break;
     }
 
-    function displayInfo(){
-        console.log('');
-        console.log('--------------------------------');
-        console.log('Information');
-        console.log('--------------------------------');
-        console.log('- db script    : ' + config.waterline.connections.localDiskDb.filePath);
-        console.log('- models path  : ' + config.modelPath);
-        console.log('--------------------------------');
-        console.log('');
+    function displayHeader(){
+        logger.green('');
+        logger.green('-------------------------------------');
+        logger.green('');
+        logger.green('   - Waterline database handler -');
+        logger.green('   Prepare to destroy the server!');
+        logger.green('');
+        logger.green('--------------------------------------');
+        logger.green('');
     }
+
+    function displayScriptInfo(command){
+        logger.green('Here are some information about your current command:');
+        logger.green('- command: %s', command);
+        logger.green('');
+    }
+
+
 })();
