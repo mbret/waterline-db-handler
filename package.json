@@ -12,7 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "lodash": "^3.10.1",
+    "waterline": "^0.10.26",
     "winston": "^1.0.1",
     "yargs": "^3.17.1"
-  }
+  },
 }

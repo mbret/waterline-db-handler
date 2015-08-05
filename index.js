@@ -1,6 +1,7 @@
 (function(){
     'use strict';
 
+    var _               = require('lodash');
     var fs              = require('fs');
     var path            = require('path');
     var util            = require('util');
@@ -15,29 +16,34 @@
 
     var command = argv._[0];
 
-    // Retrieve user specific config
-    var userConfig = configLoader(argv.config);
-    // We now have a valid config to connect to the user sails database
+    // Load user config
+    try{
+        var userConfig = argv.sails ? configLoader.loadConfigFromSails(argv.path, argv.env) : configLoader.loadConfig(argv.config);
+    }
+    catch(err){
+        logger.red("We were unable to load your %sconfig", argv.sails ? 'sails ' : null);
+        process.exit();
+    }
+    // Validate user config
+    if(!isConfigValid(userConfig)){
+        logger.red("Your %sconfig seems invalid or doesn't contain minimal settings required", argv.sails ? 'sails ' : null);
+        process.exit();
+    }
+    // Build script config with user config and internal config
     var config = mergeConfig(internalConfig, userConfig);
 
     displayScriptInfo(command);
 
     logger.yellow('Script starting..');
+
+    console.log(config);
     switch(command){
         case 'exec':
             var sample = require(argv.sample);
-            loader(config, function(err, models){
-                if(err) throw err;
-
-                require('./lib/database-provider.js')(sample);
-            });
+            require('./lib/database-provider.js')(config, sample);
             break;
         case 'drop':
-            config.waterline.models.migrate = 'drop';
-            loader(config, function(err, models){
-                if(err) throw err;
-                logger.yellow('Database dropped!');
-            });
+            require('./lib/database-drop.js')(config);
             break;
         default:
             break;
@@ -67,7 +73,24 @@
      * @param userConfig
      */
     function mergeConfig(internalConfig, userConfig){
-        return internalConfig;
+        return _.merge(internalConfig, {
+            modelPath: ''
+        });
+    }
+
+
+
+    function isConfigValid(userConfig){
+        var shouldContain = [
+
+        ];
+        var ok = true;
+        shouldContain.forEach(function(key){
+            if(!userConfig.hasOwnProperty(key)){
+                ok = false;
+            }
+        })
+        return ok;
     }
 
 })();

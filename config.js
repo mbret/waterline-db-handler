@@ -6,30 +6,36 @@ var diskAdapter = require('sails-disk');
 
 module.exports = {
 
-    configPath: path.join(__dirname, '..', '..', 'config'),
-    modelsPath: path.join(__dirname, '..', '..', 'api', 'models'),
+    modelsPath: null, // st later
 
-    waterline: {
-        // Setup Adapters
-        // Creates named adapters that have have been required
-        adapters: {
-            disk: diskAdapter,
-        },
-
-        connections: {
-            localDiskDb: {
-                adapter: 'disk',
-                filePath : path.join(__dirname, '..', '..', '.tmp') + path.sep
-            },
-        },
-
-        models: {
-            connection: 'localDiskDb'
-        },
-
-        defaults: {
-            migrate: 'alter'
-        }
+    models: {
+        migrate: 'safe' // always use safe by default
     }
+
+    //configPath: path.join(__dirname, '..', '..', 'config'),
+    //modelsPath: path.join(__dirname, '..', '..', 'api', 'models'),
+    //
+    //waterline: {
+    //    // Setup Adapters
+    //    // Creates named adapters that have have been required
+    //    adapters: {
+    //        disk: diskAdapter,
+    //    },
+    //
+    //    connections: {
+    //        localDiskDb: {
+    //            adapter: 'disk',
+    //            filePath : path.join(__dirname, '..', '..', '.tmp') + path.sep
+    //        },
+    //    },
+    //
+    //    models: {
+    //        connection: 'localDiskDb'
+    //    },
+    //
+    //    defaults: {
+    //        migrate: 'alter'
+    //    }
+    //}
 
 };
