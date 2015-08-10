@@ -2,7 +2,7 @@
  * Created by bretm on 8/3/2015.
  */
 var path = require('path');
-var diskAdapter = require('sails-disk');
+//var diskAdapter = require('sails-disk');
 
 module.exports = {
 

@@ -2,7 +2,6 @@
   "name": "waterline-db-handler",
   "version": "1.0.0",
   "description": "Manage waterline database out of waterline/sails app",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,4 +15,8 @@
     "winston": "^1.0.1",
     "yargs": "^3.17.1"
   },
+  "preferGlobal": true,
+  "bin": {
+    "waterline-db-handler": "index.js"
+  }
 }
