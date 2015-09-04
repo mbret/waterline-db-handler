@@ -1,22 +1,13 @@
 {
   "name": "waterline-db-handler",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Manage waterline database out of waterline/sails app",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": {
-    "name": "bret.maxime@gmail.com"
-  },
-  "license": "ISC",
+  "author": "Maxime Bret",
   "dependencies": {
+    "chalk": "^1.1.1",
     "lodash": "^3.10.1",
-    "waterline": "^0.10.26",
+    "mysql": "^2.8.0",
     "winston": "^1.0.1",
-    "yargs": "^3.17.1"
-  },
-  "preferGlobal": true,
-  "bin": {
-    "waterline-db-handler": "index.js"
+    "yargs": "^3.18.1"
   }
 }
